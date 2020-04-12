@@ -35,4 +35,26 @@ router.post('/add', async (req, res) => {
     }
 });
 
+
+router.post('/update/:id', (req, res) => {
+    let id = req.params.id;
+    Todo.findById(id, (error, todo) => {
+        if(error) return res.status(400).send(error);
+
+        todo.todo_description= req.body.todo_description;
+        todo.todo_responsible= req.body.todo_responsible;
+        todo.todo_priority= req.body.todo_priority;
+        todo.todo_completed= req.body.todo_completed;
+
+        try {
+            const savedTodo = todo.save();
+            res.send({todo: todo.todo_description});
+        } catch(err){
+            res.status(400).send(err);
+        }
+
+      });
+});
+
+
 module.exports = router;
